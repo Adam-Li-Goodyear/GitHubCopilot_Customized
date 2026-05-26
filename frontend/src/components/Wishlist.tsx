@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { useAuth } from '../context/AuthContext';
@@ -62,7 +62,7 @@ export default function Wishlist() {
 
           {wishlistedProducts.length === 0 ? (
             <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-300`}>
-              Your wishlist is empty. Browse <a href="/products" className="text-primary hover:underline">products</a> to add items.
+              Your wishlist is empty. Browse <Link to="/products" className="text-primary hover:underline">products</Link> to add items.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

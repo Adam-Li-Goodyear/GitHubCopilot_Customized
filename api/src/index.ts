@@ -75,7 +75,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/branches', branchRoutes);
 app.use('/api/headquarters', headquartersRoutes);
 app.use('/api/suppliers', supplierRoutes);
-app.use('/api', wishlistRouter);
+app.use('/api/wishlists', wishlistRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

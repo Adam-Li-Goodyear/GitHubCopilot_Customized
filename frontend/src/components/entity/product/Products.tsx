@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../../api/config';
 import { useTheme } from '../../../context/ThemeContext';
+import { useAuth } from '../../../context/AuthContext';
+import { useWishlist } from '../../../context/WishlistContext';
 
 interface Product {
   productId: number;
@@ -28,6 +31,9 @@ export default function Products() {
   const [showModal, setShowModal] = useState(false);
   const { data: products, isLoading, error } = useQuery('products', fetchProducts);
   const { darkMode } = useTheme();
+  const { isLoggedIn } = useAuth();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const navigate = useNavigate();
 
   const filteredProducts = products?.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,6 +62,15 @@ export default function Products() {
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
     setShowModal(true);
+  };
+
+  const handleHeartClick = (e: React.MouseEvent, productId: number) => {
+    e.stopPropagation();
+    if (!isLoggedIn) {
+      navigate('/login');
+    } else {
+      toggleWishlist(productId);
+    }
   };
 
   if (isLoading) {
@@ -125,6 +140,21 @@ export default function Products() {
                       {Math.round(product.discount * 100)}% OFF
                     </div>
                   )}
+                  <button
+                    onClick={(e) => handleHeartClick(e, product.productId)}
+                    className="absolute top-2 right-2 z-10 p-1 rounded-full bg-white/70 hover:bg-white transition-colors"
+                    aria-label={isInWishlist(product.productId) ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+                  >
+                    {isInWishlist(product.productId) ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
                 
                 <div className="p-4 flex flex-col flex-grow">

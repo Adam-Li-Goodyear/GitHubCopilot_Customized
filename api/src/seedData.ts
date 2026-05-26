@@ -6,6 +6,7 @@ import { Order } from './models/order';
 import { OrderDetail } from './models/orderDetail';
 import { Delivery } from './models/delivery';
 import { OrderDetailDelivery } from './models/orderDetailDelivery';
+import { WishlistItem } from './models/wishlistItem';
 
 // Suppliers
 export const suppliers: Supplier[] = [
@@ -292,3 +293,10 @@ export const orderDetailDeliveries: OrderDetailDelivery[] = [
         notes: "Delivery"
     }
 ];
+
+// Wishlist Items
+export let wishlistItems: WishlistItem[] = [];
+
+export const resetWishlistItems = () => {
+    wishlistItems = [];
+};
